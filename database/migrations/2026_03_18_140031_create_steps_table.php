@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Idea;
 
 return new class extends Migration
 {
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('idea_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Idea::class)->constrained()->cascadeOnDelete();
             $table->string('description');
             $table->boolean('completada')->default(false);
             $table->timestamps();
