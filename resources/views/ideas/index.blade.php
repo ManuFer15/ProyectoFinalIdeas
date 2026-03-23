@@ -3,6 +3,10 @@
         <header>
             <h1 class="text-3xl font-bold text-center text-foreground">Bienvenido a Ideas</h1>
             <p class="text-center text-foreground mt-4">Comparte tus ideas y descubre las de otros.</p>
+            <x-card x-data @click="$dispatch('open-modal', 'create-idea')" is="button" type="button"
+                    class="mt-10 space-y-3 cursor-pointer h-32 w-full text-left">
+                <p>que es una idea</p>
+            </x-card>
         </header>
         <div>
             <a href="/ideas" class="btn {{request()->has('status') ? 'btn-outlined' : ''}}">Todas</a>
@@ -31,5 +35,15 @@
                 @endforelse
             </div>
         </div>
+    <x-modal name="create-idea" title="Crear Nueva Idea">
+        <form action="{{ route('idea.store') }}" method="POST" class="space-y-6">
+            @csrf
+            <div class="space-y-6">
+                <x-form.field name="title" label="Título" autofocus placeholder="Título de tu idea" required />
+                <x-form.field name="description" label="Descripción" placeholder="Describe tu idea con el mayor detalle posible" required />
+            </div>
+
+        </form>
+    </x-modal>
     </div>
 </x-layout.layout>

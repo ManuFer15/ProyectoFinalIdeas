@@ -18,11 +18,34 @@
                 </form>
             </div>
         </div>
-        <h1 class="font-bold text-4x1">{{$idea->title}}</h1>
-        <x-card>
-            <div class="text-foreground prose prose-invert max-w-none cursor-pointer">
-                {{ $idea->description }}
+        <div class="mt-8 space-y-6">
+            <h1 class="font-bold text-4x1">{{$idea->title}}</h1>
+            <div>
+                <x-ideas.status-label status="{{ $idea->status }}">
+                    {{ $idea->status->label() }}
+                </x-ideas.status-label>
+                <div class="mt-2 flex items-center gap-x-3">
+                    <span class="text-sm text-muted-foreground">{{ $idea->created_at->diffForHumans() }}</span>
+                </div>
             </div>
-        </x-card>
+            <x-card>
+                <div class="text-foreground prose prose-invert max-w-none cursor-pointer">
+                    {{ $idea->description }}
+                </div>
+            </x-card>
+            @if(count($idea->links))
+                <div>
+                    <h3 class="mt-6">Links</h3>
+                    <div class="mt-3 space-y-3">
+                        @foreach($idea->links as $link)
+                            <x-card :href="$link" class="text-primary font-medium flex gap-x-3 items-center">
+                                <x-icons.external />
+                                {{$link}}
+                            </x-card>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
 </x-layout.layout>

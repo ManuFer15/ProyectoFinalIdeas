@@ -17,13 +17,8 @@ class IdeaController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $status = $request->status;
-
-        if (! in_array($status, IdeaStatus::values())) {
-            $status = null;
-        }
         $ideas = $user->ideas()
-            ->when($request->status, fn ($query, $status) => $query->where('status', $status))->get();
+            ->when(in_array($request->status, IdeaStatus::values()), fn ($query) => $query->where('status', $request->status))->get();
 
         return view('ideas.index', [
             'ideas' => $ideas,
@@ -44,7 +39,13 @@ class IdeaController extends Controller
      */
     public function store(StoreIdeaRequest $request)
     {
-        //
+        $idea = Idea::create([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('idea.show', $idea);
     }
 
     /**
