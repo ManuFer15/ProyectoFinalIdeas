@@ -1,6 +1,16 @@
 <?php
 
 uses(
+    Tests\DuskTestCase::class,
+    // Illuminate\Foundation\Testing\DatabaseMigrations::class,
+)->in('Browser');
+
+uses(
+    Tests\DuskTestCase::class,
+    // Illuminate\Foundation\Testing\DatabaseMigrations::class,
+)->in('Browser');
+
+uses(
     DuskTestCase::class,
     // Illuminate\Foundation\Testing\DatabaseMigrations::class,
 )->in('Browser');

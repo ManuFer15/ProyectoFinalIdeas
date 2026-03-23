@@ -3,9 +3,9 @@
         <header>
             <h1 class="text-3xl font-bold text-center text-foreground">Bienvenido a Ideas</h1>
             <p class="text-center text-foreground mt-4">Comparte tus ideas y descubre las de otros.</p>
-            <x-card x-data @click="$dispatch('open-modal', 'create-idea')" is="button" type="button"
-                    class="mt-10 space-y-3 cursor-pointer h-32 w-full text-left">
-                <p>que es una idea</p>
+            <x-card x-data @click="$dispatch('open-modal', 'create-idea')" is="button" type="button" dusk="create-idea-button"
+                    class="mt-10 space-y-3 cursor-pointer h-32 w-full text-left" data-test="create-idea-button">
+                <p>¿Cuál es la idea?</p>
             </x-card>
         </header>
         <div>
@@ -36,15 +36,15 @@
             </div>
         </div>
         <x-modal name="create-idea" title="Crear Nueva Idea">
-            <form x-data="{status: 'pendiente'}" action="{{ route('idea.store') }}" method="POST" class="space-y-6">
+            <form x-data="{status: 'pendiente', newLink: '', links: []}" action="{{ route('idea.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div class="space-y-6">
-                    <x-form.field name="title" label="Título" autofocus placeholder="Título de tu idea" required />
+                    <x-form.field name="title" label="Título" autofocus dusk="title-input" placeholder="Título de tu idea" required />
                     <div class="space-y-2">
                         <label for="status" class="label">Estado</label>
                         <div class="flex gap-x-3">
                             @foreach(App\IdeaStatus::cases() as $status)
-                                <button type="button" @click="status = @js($status->value)"
+                                <button type="button" @click="status = @js($status->value)" data-test="button-status-{{ $status->value }}"
                                         class="btn flex-1 h-10" :class="{'btn-outlined': status !== @js($status->value)}"
                                 >
                                     {{$status->label()}}
@@ -54,11 +54,34 @@
                         </div>
                         <x-form.error name="status" />
                     </div>
-                    <x-form.field type="textarea" name="description" label="Descripción" placeholder="Describe tu idea con el mayor detalle posible" />
+                    <x-form.field type="textarea" name="description" label="Descripción" dusk="description-input" placeholder="Describe tu idea con el mayor detalle posible" />
                 </div>
+                <div>
+                    <fieldset class="space-y-3">
+                        <legend class="label">Links</legend>
+                        <div class="flex gap-x-2 items-center">
+                            <input type="url"
+                                      x-model="newLink"
+                                   id="new-link"
+                                   placeholder="https://example.com"
+                                   autocomplete="url"
+                                      class="input flex-1"
+                                   spellcheck="false"
+                            >
+                            <button type="button" @click="links.push(newLink.trim()); newLink = '';"
+                                    dusk="add-link-button" class="btn" :disabled="!newLink.trim().length === 0">
+                                <x-icons.close class="rotate-45" />
+                            </button>
+                        </div>
+                        <pre x-text="JSON.stringify(links, null, 2)"
+                             class="bg-muted p-3 rounded text-sm text-foreground overflow-x-auto">
+                        </pre>
+                    </fieldset>
+                </div>
+
                 <div class="flex justify-end gap-x-5">
                     <button type="submit" @click="$dispatch('close-modal')">Cancelar</button>
-                    <button type="submit" class="btn">Crear</button>
+                    <button type="submit" dusk="button-create-idea" class="btn">Crear</button>
                 </div>
             </form>
         </x-modal>
