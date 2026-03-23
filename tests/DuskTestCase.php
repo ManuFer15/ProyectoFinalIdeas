@@ -2,10 +2,11 @@
 
 namespace Tests;
 
-use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Chrome\ChromeOptions;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Laravel\Dusk\TestCase as BaseTestCase;
+use Symfony\Component\Process\Process;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -21,7 +22,7 @@ abstract class DuskTestCase extends BaseTestCase
         $driverPath = 'C:\Users\34655\herd\idea\drivers\chromedriver.exe';
 
         // Start the ChromeDriver process
-        static::$chromeDriverProcess = new \Symfony\Component\Process\Process(
+        static::$chromeDriverProcess = new Process(
             array_merge([$driverPath], $arguments)
         );
 

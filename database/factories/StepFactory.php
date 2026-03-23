@@ -3,10 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\Idea;
+use App\Models\Step;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Step>
+ * @extends Factory<Step>
  */
 class StepFactory extends Factory
 {
@@ -20,7 +21,7 @@ class StepFactory extends Factory
         return [
             'idea_id' => Idea::factory(),
             'description' => fake()->sentence(),
-            'completada' => false
+            'completada' => false,
         ];
     }
 }

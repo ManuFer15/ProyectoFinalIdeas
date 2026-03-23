@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\IdeaController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +17,9 @@ use App\Http\Controllers\SessionController;
 */
 
 Route::redirect('/', '/ideas');
-Route::get('/ideas', [IdeaController::class, 'index'])->middleware('auth');
+Route::get('/ideas', [IdeaController::class, 'index'])->name('idea.index')->middleware('auth');
+Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show')->middleware('auth');
+Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy')->middleware('auth');
 
 Route::get('/register', [RegisteredUserController::class, 'create']);
 Route::post('/register', [RegisteredUserController::class, 'store']);

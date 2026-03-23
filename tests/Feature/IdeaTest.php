@@ -24,7 +24,7 @@ test('tiene pasos', function () {
     expect($idea->steps)->toBeEmpty();
 
     $paso = $idea->steps()->create([
-        'description' => 'Este es un paso de prueba'
+        'description' => 'Este es un paso de prueba',
     ]);
 
     expect($idea->fresh()->steps)

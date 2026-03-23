@@ -1,4 +1,5 @@
 <?php
+
 /*
 use Laravel\Dusk\Browser;
 
@@ -58,7 +59,6 @@ test('verificar que el usuario fue creado', function () {
     });
 });
 */
-
 
 use Laravel\Dusk\Browser;
 

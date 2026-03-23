@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Idea;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class IdeaPolicy
 {
@@ -13,7 +12,7 @@ class IdeaPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +20,7 @@ class IdeaPolicy
      */
     public function view(User $user, Idea $idea): bool
     {
-        //
+        return $user->id === $idea->user_id;
     }
 
     /**
@@ -29,7 +28,7 @@ class IdeaPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -37,7 +36,7 @@ class IdeaPolicy
      */
     public function update(User $user, Idea $idea): bool
     {
-        //
+        return $user->id === $idea->user_id;
     }
 
     /**
@@ -45,7 +44,7 @@ class IdeaPolicy
      */
     public function delete(User $user, Idea $idea): bool
     {
-        //
+        return $user->id === $idea->user_id;
     }
 
     /**
@@ -53,7 +52,7 @@ class IdeaPolicy
      */
     public function restore(User $user, Idea $idea): bool
     {
-        //
+        return false;
     }
 
     /**
@@ -61,6 +60,6 @@ class IdeaPolicy
      */
     public function forceDelete(User $user, Idea $idea): bool
     {
-        //
+        return false;
     }
 }
