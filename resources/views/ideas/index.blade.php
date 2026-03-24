@@ -19,6 +19,11 @@
             <div class="grid md:grid-cols-2 gap-6">
                 @forelse( $ideas as $idea)
                     <x-card href="/ideas/{{ $idea->id }}">
+                        @if($idea->image_path)
+                            <div class="mb-4 -mx-4 -mt-4 rounded-lg overflow-hidden">
+                                <img src="{{ Storage::url($idea->image_path) }}" alt="" class="w-full h-48 object-cover">
+                            </div>
+                        @endif
                         <h3 class="text-xl font-semibold text-foreground">{{ $idea->title }}</h3>
                         <div class="mt-1">
                             <x-ideas.status-label status="{{ $idea->status }}">
@@ -126,6 +131,7 @@
                             >
                                 <x-icons.plus class="rotate-45" />
                             </button>
+                        </div>
                     </fieldset>
                 </div>
                 <div class="flex justify-end gap-x-5">

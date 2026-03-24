@@ -20,8 +20,8 @@
         </div>
         <div class="mt-8 space-y-6">
             @if($idea->image_path)
-                <div>
-                    <img src="{{ Storage::url($idea->image_path) }}" alt="Imagen de la idea">
+                <div class="rounded-lg overflow-hidden">
+                    <img src="{{ Storage::url($idea->image_path) }}" alt="" class="w-full h-auto object-cover">
                 </div>
 
             @endif
