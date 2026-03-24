@@ -9,7 +9,7 @@ use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class IdeaController extends Controller
 {
@@ -40,10 +40,9 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIdeaRequest $request)
-    {/*
-       */
-        (new CreateIdea)->handle($request->safe()->all());
+    public function store(StoreIdeaRequest $request, CreateIdea $action)
+    {
+        $action->handle($request->safe()->all());
 
         return to_route('idea.index')->with('success', 'Has creado una nueva idea.');
     }
@@ -53,6 +52,7 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
+        Gate::authorize('workWith', $idea);
         return view('ideas.show', [
             'idea' => $idea,
         ]);
@@ -63,7 +63,7 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea)
     {
-        //
+        Gate::authorize('workWith', $idea);
     }
 
     /**
@@ -71,7 +71,7 @@ class IdeaController extends Controller
      */
     public function update(UpdateIdeaRequest $request, Idea $idea)
     {
-        //
+        Gate::authorize('workWith', $idea);
     }
 
     /**
@@ -79,7 +79,7 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
-        $this->authorize('delete', $idea);
+        Gate::authorize('workWith', $idea);
 
         $idea->delete();
 

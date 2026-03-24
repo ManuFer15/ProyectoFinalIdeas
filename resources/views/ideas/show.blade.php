@@ -6,7 +6,10 @@
                 Volver
             </a>
             <div class="gap-x-3 flex items-center">
-                <button class="btn btn-outlined">
+                <button class="btn btn-outlined" data-test="edit-idea-button"
+                        x-data
+                        @click="$dispatch('open-modal', 'edit-idea')"
+                >
                     <x-icons.external />
                     Editar Idea
                 </button>
@@ -34,11 +37,13 @@
                     <span class="text-sm text-muted-foreground">{{ $idea->created_at->diffForHumans() }}</span>
                 </div>
             </div>
-            <x-card>
-                <div class="text-foreground prose prose-invert max-w-none cursor-pointer">
-                    {{ $idea->description }}
-                </div>
-            </x-card>
+            @if($idea->description)
+                <x-card>
+                    <div class="text-foreground prose prose-invert max-w-none cursor-pointer">
+                        {{ $idea->description }}
+                    </div>
+                </x-card>
+            @endif
             @if(count($idea->steps))
                 <div>
                     <h3 class="mt-6">Pasos</h3>
@@ -75,5 +80,6 @@
                 </div>
             @endif
         </div>
+        <x-ideas.modal :idea="$idea" />
     </div>
 </x-layout.layout>
