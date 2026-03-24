@@ -8,6 +8,7 @@ use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class IdeaController extends Controller
 {
@@ -40,7 +41,19 @@ class IdeaController extends Controller
      */
     public function store(StoreIdeaRequest $request)
     {
-        Auth::user()->ideas()->create($request->validated());
+        DB::transaction(function() use ($request): void {
+            $idea = Auth::user()->ideas()->create($request->safe()->except('steps'));
+
+            $steps = collect($request->safe()->input('steps', []))
+                ->map(fn($step) => ['description' => $step])
+                ->all();
+
+            if ($steps !== []) {
+                $idea->steps()->createMany($steps);
+            }
+        });
+
+
         return to_route('idea.index')->with('success', 'Has creado una nueva idea.');
     }
 
@@ -49,8 +62,6 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
-        $this->authorize('view', $idea);
-
         return view('ideas.show', [
             'idea' => $idea,
         ]);

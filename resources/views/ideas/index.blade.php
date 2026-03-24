@@ -36,7 +36,8 @@
             </div>
         </div>
         <x-modal name="create-idea" title="Crear Nueva Idea">
-            <form x-data="{status: 'pendiente', newLink: '', links: []}" action="{{ route('idea.store') }}" method="POST" class="space-y-6">
+            <form x-data="{status: 'pendiente', newLink: '', links: [], newStep: '', steps: []}"
+                  action="{{ route('idea.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div class="space-y-6">
                     <x-form.field name="title" label="Título" autofocus dusk="title-input" placeholder="Título de tu idea" required />
@@ -58,12 +59,44 @@
                 </div>
                 <div>
                     <fieldset class="space-y-3">
+                        <legend class="label">Pasos</legend>
+                        <template x-for="(step, index) in steps" :key="step">
+                            <div class="flex gap-x-2 items-center">
+                                <input class="input" name="steps[]" x-model="step" readonly>
+                                <button type="button"
+                                        @click="steps.splice(index, 1)"
+                                        class="form-muted-icon"
+                                        aria-label="Eliminar paso"
+                                >
+                                    <x-icons.plus />
+                                </button>
+                            </div>
+                        </template>
+                        <div class="flex gap-x-2 items-center">
+                            <input x-model="newStep"
+                                   id="new-step"
+                                   type="text"
+                                   placeholder="Describe el paso"
+                                   class="input flex-1"
+                                   spellcheck="false"
+                            >
+                        </div>
+                        <button type="button" @click="steps.push(newStep.trim()); newStep = '';"
+                                dusk="add-step-button" class="btn" :disabled="!newStep.trim().length === 0"
+                                aria-label="Añadir paso"
+                        >
+                            <x-icons.plus />
+                        </button>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="space-y-3">
                         <legend class="label">Links</legend>
                         <template x-for="(link, index) in links" :key="link">
                             <div class="flex gap-x-2 items-center">
                                 <input class="input" name="links[]" x-model="link">
                                 <button type="button"
-                                        @click="links = links.splice(index, 1)"
+                                        @click="links.splice(index, 1)"
                                         class="form-muted-icon"
                                         aria-label="Eliminar link"
                                 >
@@ -86,10 +119,8 @@
                             >
                                 <x-icons.plus class="rotate-45" />
                             </button>
-                        </div>
                     </fieldset>
                 </div>
-
                 <div class="flex justify-end gap-x-5">
                     <button type="submit" @click="$dispatch('close-modal')">Cancelar</button>
                     <button type="submit" dusk="button-create-idea" class="btn">Crear</button>

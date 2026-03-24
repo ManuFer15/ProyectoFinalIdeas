@@ -33,6 +33,28 @@
                     {{ $idea->description }}
                 </div>
             </x-card>
+            @if(count($idea->steps))
+                <div>
+                    <h3 class="mt-6">Pasos</h3>
+                    <div class="mt-3 space-y-3">
+                        @foreach($idea->steps as $step)
+                            <x-card>
+                               <form method="post" action="{{ route('step.update', $step) }}">
+                                    @csrf
+                                   @method('PATCH')
+
+                                   <div class="flex items-center gap-x-3">
+                                       <button type="submit" role="checkbox"
+                                           class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{$step->completada ? 'bg-primary' : 'border border-primary'}}">&check;</button>
+                                       <span class="{{$step->completada ? 'line-through text-muted-foreground' : ''}}">{{$step->description}}</span>
+                                   </div>
+                               </form>
+                            </x-card>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             @if(count($idea->links))
                 <div>
                     <h3 class="mt-6">Links</h3>
