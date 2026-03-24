@@ -37,7 +37,9 @@
         </div>
         <x-modal name="create-idea" title="Crear Nueva Idea">
             <form x-data="{status: 'pendiente', newLink: '', links: [], newStep: '', steps: []}"
-                  action="{{ route('idea.store') }}" method="POST" class="space-y-6">
+                  action="{{ route('idea.store') }}" method="POST" class="space-y-6"
+                    enctype="multipart/form-data"
+            >
                 @csrf
                 <div class="space-y-6">
                     <x-form.field name="title" label="Título" autofocus dusk="title-input" placeholder="Título de tu idea" required />
@@ -56,6 +58,11 @@
                         <x-form.error name="status" />
                     </div>
                     <x-form.field type="textarea" name="description" label="Descripción" dusk="description-input" placeholder="Describe tu idea con el mayor detalle posible" />
+                </div>
+                <div class="space-y-2">
+                    <label for="image" class="label">Imagen</label>
+                    <input type="file" name="image" >
+                    <x-form.error name="image" />
                 </div>
                 <div>
                     <fieldset class="space-y-3">

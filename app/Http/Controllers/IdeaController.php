@@ -42,11 +42,16 @@ class IdeaController extends Controller
     public function store(StoreIdeaRequest $request)
     {
         DB::transaction(function() use ($request): void {
-            $idea = Auth::user()->ideas()->create($request->safe()->except('steps'));
+            $idea = Auth::user()->ideas()->create($request->safe()->except('steps', 'image'));
 
             $steps = collect($request->safe()->input('steps', []))
                 ->map(fn($step) => ['description' => $step])
                 ->all();
+
+            $imagen_path = $request->image->store('ideas', 'public');
+            $idea->update([
+                'image_path' => $imagen_path,
+            ]);
 
             if ($steps !== []) {
                 $idea->steps()->createMany($steps);

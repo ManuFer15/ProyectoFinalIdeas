@@ -19,6 +19,12 @@
             </div>
         </div>
         <div class="mt-8 space-y-6">
+            @if($idea->image_path)
+                <div>
+                    <img src="{{ Storage::url($idea->image_path) }}" alt="Imagen de la idea">
+                </div>
+
+            @endif
             <h1 class="font-bold text-4x1">{{$idea->title}}</h1>
             <div>
                 <x-ideas.status-label status="{{ $idea->status }}">
