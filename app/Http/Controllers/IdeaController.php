@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Gate;
 class IdeaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Lista las ideas del usuario autenticado con filtro opcional por estado.
      */
     public function index(Request $request)
     {
         $user = Auth::user();
         $ideas = $user->ideas()
+            // Solo aplica el filtro cuando el estado recibido pertenece al enum.
             ->when(in_array($request->status, IdeaStatus::values()), fn ($query) => $query->where('status', $request->status))
             ->latest()->get();
 
@@ -30,7 +31,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * El formulario se abre en modal desde la vista index.
      */
     public function create(): void
     {
@@ -38,7 +39,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crea una idea validada mediante la acción de aplicación.
      */
     public function store(IdeaRequest $request, CreateIdea $action)
     {
@@ -48,7 +49,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el detalle de una idea si el usuario está autorizado.
      */
     public function show(Idea $idea)
     {
@@ -60,7 +61,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * La edición se protege por policy y se renderiza en modal/vista cliente.
      */
     public function edit(Idea $idea): void
     {
@@ -68,7 +69,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza una idea existente con autorización previa.
      */
     public function update(IdeaRequest $request, Idea $idea, UpdateIdea $action)
     {
@@ -81,7 +82,7 @@ class IdeaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina la idea y sus recursos relacionados por cascada.
      */
     public function destroy(Idea $idea)
     {

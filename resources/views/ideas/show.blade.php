@@ -6,6 +6,7 @@
                 Volver
             </a>
             <div class="gap-x-3 flex items-center">
+                {{-- Edición y borrado visibles para operar sobre la idea actual. --}}
                 <button class="btn btn-outlined" data-test="edit-idea-button"
                         x-data
                         @click="$dispatch('open-modal', 'edit-idea')"
@@ -23,6 +24,7 @@
         </div>
         <div class="mt-8 space-y-6">
             @if($idea->image_path)
+                {{-- La imagen se muestra solo cuando existe para evitar layout vacío. --}}
                 <div class="rounded-lg overflow-hidden">
                     <img src="{{ Storage::url($idea->image_path) }}" alt="" class="w-full h-auto object-cover">
                 </div>
@@ -38,15 +40,16 @@
                 </div>
             </div>
             @if($idea->description)
-                <x-card>
+                <x-card class="mt-6" is="div">
                     <div class="text-foreground prose prose-invert max-w-none cursor-pointer">
-                        {{ $idea->description }}
+                        {{ $idea->formattedDescription }}
                     </div>
                 </x-card>
             @endif
             @if(count($idea->steps))
                 <div>
                     <h3 class="mt-6">Pasos</h3>
+                    {{-- Cada paso permite toggle de completado sin salir del detalle. --}}
                     <div class="mt-3 space-y-3">
                         @foreach($idea->steps as $step)
                             <x-card>
@@ -69,6 +72,7 @@
             @if(count($idea->links))
                 <div>
                     <h3 class="mt-6">Links</h3>
+                    {{-- Referencias externas asociadas a la ejecución de la idea. --}}
                     <div class="mt-3 space-y-3">
                         @foreach($idea->links as $link)
                             <x-card :href="$link" class="text-primary font-medium flex gap-x-3 items-center">

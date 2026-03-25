@@ -2,6 +2,7 @@
 @php
     $classes ='inline-block rounded-full border px-2 py-1 text-xs font-medium';
 
+    // Mapa visual estado -> color para que la UI comunique progreso de un vistazo.
     if($status === 'pendiente'){
         $classes .= ' bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
     } elseif($status === 'completada'){

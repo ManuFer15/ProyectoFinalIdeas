@@ -11,6 +11,7 @@
             </x-card>
         </header>
         <div>
+            {{-- Filtros rápidos por estado para navegación de backlog personal. --}}
             <a href="/ideas" class="btn {{request()->has('status') ? 'btn-outlined' : ''}}">Todas</a>
             @foreach(App\IdeaStatus::cases() as $status)
                 <a href="/ideas?status={{ $status->value }}" class="btn {{request('status') === $status->value ? '' : 'btn-outlined'}}">
@@ -22,6 +23,7 @@
                 @forelse( $ideas as $idea)
                     <x-card href="/ideas/{{ $idea->id }}">
                         @if($idea->image_path)
+                            {{-- La portada es opcional y mejora el escaneo visual de tarjetas. --}}
                             <div class="mb-4 -mx-4 -mt-4 rounded-lg overflow-hidden">
                                 <img src="{{ Storage::url($idea->image_path) }}" alt="" class="w-full h-48 object-cover">
                             </div>
@@ -36,6 +38,7 @@
                         <div class="mt-4">{{$idea->created_at->diffForHumans()}}</div>
                     </x-card>
                 @empty
+                    {{-- Estado vacío cuando el usuario aún no tiene ideas en el filtro actual. --}}
                     <x-card>
                         <p class="text-center text-foreground mt-10">No hay ideas para mostrar.</p>
                     </x-card>

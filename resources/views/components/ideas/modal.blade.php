@@ -1,6 +1,7 @@
 @props(['idea' => new App\Models\Idea()])
 
 <x-modal name="{{ $idea->exists ? 'edit-idea' : 'create-idea' }}" title="{{ $idea->exists ? 'Editar Idea' : 'Crear Idea' }}" :max-width="'2xl'">
+    {{-- Estado de UI en Alpine para editar colecciones dinámicas (links/pasos). --}}
     <form x-data="{status: @js(old('status', $idea->status->value)),
             newLink: '', links: @js(old('links', $idea->links ?? [])),
             newStep: '', steps: @js(old('steps', $idea->steps)->map->only(['id','description', 'completada']))}"
@@ -16,6 +17,7 @@
             <div class="space-y-2">
                 <label for="status" class="label">Estado</label>
                 <div class="flex gap-x-3">
+                    {{-- Selector visual de estado sincronizado con input hidden para el submit. --}}
                     @foreach(App\IdeaStatus::cases() as $status)
                         <button type="button" @click="status = @js($status->value)" data-test="button-status-{{ $status->value }}"
                                 class="btn flex-1 h-10" :class="{'btn-outlined': status !== @js($status->value)}"
@@ -44,6 +46,7 @@
         <div>
             <fieldset class="space-y-3">
                 <legend class="label">Pasos</legend>
+                {{-- Se serializan pasos como steps[index][campo] para hidratación en Request. --}}
                 <template x-for="(step, index) in steps" :key="step.id || index">
                     <div class="flex gap-x-2 items-center">
                         <input class="input" :name="'steps[' + index + '][description]'" x-model="step.description" readonly>
@@ -78,6 +81,7 @@
         <div>
             <fieldset class="space-y-3">
                 <legend class="label">Links</legend>
+                {{-- Links dinámicos con índices explícitos para mantener orden y validación. --}}
                 <template x-for="(link, index) in links" :key="link">
                     <div class="flex gap-x-2 items-center">
                         <input class="input" :name="'links[' + index + ']'" x-model="link">
@@ -114,6 +118,7 @@
         </div>
     </form>
     @if($idea->image_path)
+        {{-- Formulario separado para borrar imagen sin interferir con el submit principal. --}}
         <form id="delete-image-form" method="POST" action="{{ route('idea.image.destroy', $idea) }}">
             @csrf
             @method('DELETE')

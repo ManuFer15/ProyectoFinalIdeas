@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 class IdeaRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * La autorización fina se resuelve en políticas/controlador.
      */
     public function authorize(): bool
     {
@@ -18,7 +18,7 @@ class IdeaRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Reglas de entrada para crear/actualizar una idea.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
@@ -27,6 +27,7 @@ class IdeaRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            // Estado controlado por enum para evitar valores fuera de dominio.
             'status' => ['required', Rule::enum(IdeaStatus::class)],
             'links' => ['nullable', 'array'],
             'links.*' => ['url', 'max:255'],
