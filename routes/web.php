@@ -6,6 +6,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IdeaImageController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,6 @@ Route::Get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store']);
 
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth');
+
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');

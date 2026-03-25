@@ -3,8 +3,9 @@
         <div class="font-black flex items-center space-x-4 text-lg text-foreground hover:text-primary transition-colors duration-300">
             <a href="/">Ideas</a>
         </div>
-        <div>
+        <div class="flex items-center gap-x-5">
             @auth
+                <a href="{{ route('profile.edit') }}" class="btn text-foreground hover:text-primary transition-colors duration-300">Editar perfil</a>
                 <form method="POST" action="/logout">
                     @csrf
                     <button type="submit" class="btn text-foreground hover:text-primary transition-colors duration-300">Cerrar Sesión</button>
