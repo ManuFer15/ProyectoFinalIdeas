@@ -23,9 +23,9 @@ class CreateIdea
             $idea = $user->ideas()->create($data);
             // Crear los pasos filtrando solo aquellos que tengan descripción
             $steps = collect($attributes['steps'] ?? [])
-                ->filter(fn ($step) => !empty($step['description']))
+                ->filter(fn ($step) => ! empty($step['description']))
                 ->toArray();
-            if (!empty($steps)) {
+            if (! empty($steps)) {
                 $idea->steps()->createMany($steps);
             }
         });

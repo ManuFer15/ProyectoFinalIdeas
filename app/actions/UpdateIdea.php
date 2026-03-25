@@ -3,10 +3,7 @@
 namespace App\actions;
 
 use App\Models\Idea;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 
 class UpdateIdea
 {
@@ -25,9 +22,9 @@ class UpdateIdea
             // Actualizar pasos: eliminar los antiguos y crear los nuevos
             $idea->steps()->delete();
             $steps = collect($attributes['steps'] ?? [])
-                ->filter(fn ($step) => !empty($step['description']))
+                ->filter(fn ($step) => ! empty($step['description']))
                 ->toArray();
-            if (!empty($steps)) {
+            if (! empty($steps)) {
                 $idea->steps()->createMany($steps);
             }
         });

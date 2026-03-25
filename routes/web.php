@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\IdeaImageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\IdeaImageController;
-use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
