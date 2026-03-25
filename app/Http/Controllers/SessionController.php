@@ -25,7 +25,7 @@ class SessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/')->with('success', 'Se ha iniciado sesión correctamente!');
+        return redirect()->intended(route('idea.index'))->with('success', 'Se ha iniciado sesión correctamente!');
     }
 
     public function destroy(Request $request)

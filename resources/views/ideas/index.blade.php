@@ -1,7 +1,9 @@
 <x-layout.layout>
     <div>
         <header>
-            <h1 class="text-3xl font-bold text-center text-foreground">Bienvenido a Ideas</h1>
+            <h1 class="text-3xl font-bold text-center text-foreground">
+                ¡Bienvenido, <span>{{ auth()->user()?->name }}</span>!
+            </h1>
             <p class="text-center text-foreground mt-4">Comparte tus ideas y descubre las de otros.</p>
             <x-card x-data @click="$dispatch('open-modal', 'create-idea')" is="button" type="button" dusk="create-idea-button"
                     class="mt-10 space-y-3 cursor-pointer h-32 w-full text-left" data-test="create-idea-button">
