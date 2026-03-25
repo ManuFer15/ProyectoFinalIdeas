@@ -1,11 +1,16 @@
 @props(['idea' => new App\Models\Idea()])
 
 <x-modal name="{{ $idea->exists ? 'edit-idea' : 'create-idea' }}" title="{{ $idea->exists ? 'Editar Idea' : 'Crear Idea' }}" :max-width="'2xl'">
-    <form x-data="{status: @js(old('status', $idea->status->value)), newLink: '', links: [], newStep: '', steps: []}"
-          action="{{ route('idea.store') }}" method="POST" class="space-y-6"
+    <form x-data="{status: @js(old('status', $idea->status->value)),
+            newLink: '', links: @js(old('links', $idea->links ?? [])),
+            newStep: '', steps: @js(old('steps', $idea->steps)->map(fn($step) => $step->description))}"
+          action="{{ $idea->exists ? route('idea.update', $idea) : route('idea.store') }}" method="POST" class="space-y-6"
           enctype="multipart/form-data"
     >
         @csrf
+        @if($idea->exists)
+            @method('PATCH')
+        @endif
         <div class="space-y-6">
             <x-form.field name="title" label="Título" autofocus placeholder="Título de tu idea" required :value="$idea->title" />
             <div class="space-y-2">
@@ -103,10 +108,10 @@
         </div>
         <div class="flex justify-end gap-x-5">
             <button type="submit" @click="$dispatch('close-modal')">Cancelar</button>
-            <button type="submit" dusk="button-create-idea" class="btn">Crear</button>
+            <button type="submit" dusk="button-create-idea" class="btn">{{ $idea->exists ? 'Actualizar' : 'Crear' }}</button>
         </div>
     </form>
-@if($idea->image_path)
+    @if($idea->image_path)
         <form id="delete-image-form" method="POST" action="{{ route('idea.image.destroy', $idea) }}">
             @csrf
             @method('DELETE')
