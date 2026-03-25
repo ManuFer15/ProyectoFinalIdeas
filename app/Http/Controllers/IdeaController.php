@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\actions\CreateIdea;
+use App\actions\UpdateIdea;
 use App\Http\Requests\IdeaRequest;
 use App\Http\Requests\UpdateIdeaRequest;
 use App\IdeaStatus;
@@ -32,7 +33,7 @@ class IdeaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -61,7 +62,7 @@ class IdeaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Idea $idea)
+    public function edit(Idea $idea): void
     {
         Gate::authorize('workWith', $idea);
     }
@@ -69,9 +70,13 @@ class IdeaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(IdeaRequest $request, Idea $idea)
+    public function update(IdeaRequest $request, Idea $idea, UpdateIdea $action)
     {
         Gate::authorize('workWith', $idea);
+
+        $action->handle($request->safe()->all(), $idea);
+
+        return back()->with('success', 'Has actualizado tu idea.');
 
     }
 

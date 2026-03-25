@@ -2,15 +2,16 @@
 
 namespace App\actions;
 
+use App\Models\Idea;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class CreateIdea
-{
-    public function handle(array $attributes)
-    {
-        $user = Auth::user();
 
+class UpdateIdea
+{
+    public function handle(array $attributes, Idea $idea)
+    {
         $data = collect($attributes)->only([
             'title', 'description', 'status', 'links',
         ])->toArray();
@@ -19,9 +20,10 @@ class CreateIdea
             $data['image_path'] = $attributes['image']->store('ideas', 'public');
         }
 
-        DB::transaction(function () use ($data, $user, $attributes) {
-            $idea = $user->ideas()->create($data);
-            // Crear los pasos filtrando solo aquellos que tengan descripción
+        DB::transaction(function () use ($idea, $data, $attributes) {
+            $idea->update($data);
+            // Actualizar pasos: eliminar los antiguos y crear los nuevos
+            $idea->steps()->delete();
             $steps = collect($attributes['steps'] ?? [])
                 ->filter(fn ($step) => !empty($step['description']))
                 ->toArray();

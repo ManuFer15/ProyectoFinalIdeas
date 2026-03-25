@@ -3,7 +3,7 @@
 <x-modal name="{{ $idea->exists ? 'edit-idea' : 'create-idea' }}" title="{{ $idea->exists ? 'Editar Idea' : 'Crear Idea' }}" :max-width="'2xl'">
     <form x-data="{status: @js(old('status', $idea->status->value)),
             newLink: '', links: @js(old('links', $idea->links ?? [])),
-            newStep: '', steps: @js(old('steps', $idea->steps)->map(fn($step) => $step->description))}"
+            newStep: '', steps: @js(old('steps', $idea->steps)->map->only(['id','description', 'completada']))}"
           action="{{ $idea->exists ? route('idea.update', $idea) : route('idea.store') }}" method="POST" class="space-y-6"
           enctype="multipart/form-data"
     >
@@ -44,9 +44,10 @@
         <div>
             <fieldset class="space-y-3">
                 <legend class="label">Pasos</legend>
-                <template x-for="(step, index) in steps" :key="step">
+                <template x-for="(step, index) in steps" :key="step.id || index">
                     <div class="flex gap-x-2 items-center">
-                        <input class="input" name="steps[]" x-model="step" readonly>
+                        <input class="input" :name="'steps[' + index + '][description]'" x-model="step.description" readonly>
+                        <input type="hidden" :name="'steps[' + index + '][completada]'" x-model="step.completada ? '1' : '0'" class="input" readonly>
                         <button type="button"
                                 @click="steps.splice(index, 1)"
                                 class="form-muted-icon"
@@ -65,7 +66,8 @@
                            spellcheck="false"
                     >
                 </div>
-                <button type="button" @click="steps.push(newStep.trim()); newStep = '';"
+                <button type="button" @click="steps.push({ description: newStep.trim(), completada: false });
+                        newStep = '';"
                         dusk="add-step-button" class="btn" :disabled="!newStep.trim().length === 0"
                         aria-label="Añadir paso"
                 >
@@ -78,7 +80,7 @@
                 <legend class="label">Links</legend>
                 <template x-for="(link, index) in links" :key="link">
                     <div class="flex gap-x-2 items-center">
-                        <input class="input" name="links[]" x-model="link">
+                        <input class="input" :name="'links[' + index + ']'" x-model="link">
                         <button type="button"
                                 @click="links.splice(index, 1)"
                                 class="form-muted-icon"
